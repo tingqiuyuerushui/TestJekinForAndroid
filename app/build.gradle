@@ -1,5 +1,6 @@
 apply plugin: 'com.android.application'
-
+apply plugin: 'findbugs'
+apply plugin: 'jacoco'
 android {
     compileSdkVersion 25
     buildToolsVersion "25.0.0"
@@ -16,8 +17,16 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+        debug{
+            testCoverageEnabled true
+        }
     }
-
+    lintOptions {
+        abortOnError false
+    }
+    jacoco{
+        version "0.7.4.201502262128"
+    }
     android.applicationVariants.all { variant ->
         variant.outputs.each { output ->
             if (output.outputFile != null && output.outputFile.name.endsWith('.apk')) {
@@ -26,23 +35,43 @@ android {
             }
         }
     }
-    apply plugin: "pmd"
-
-    repositories {
-        mavenCentral()
-    }
-    task pmd(type: Pmd) {
+    task findbugs(type: FindBugs,dependsOn:"connectedAndroidTest") {//
         ignoreFailures = true
-        source = fileTree('src/com/xw/')
-        //ruleSetConfig = resources.file("${project.rootDir}/config/pmd/PmdRuleSets.xml")
-        //ruleSetFiles = files("config/pmd/PmdRuleSets.xml")
-        ruleSetFiles = files("${project.rootDir}/config/pmd/PmdRuleSets.xml")
-        ruleSets = ["java-android"]
+        effort = "default"
+        reportLevel = "medium"
+        //这里填写项目classes目录
+        classes = files("${project.rootDir}/andbase-core/build/intermediates/classes")
+        source = fileTree('src/main/java')
+        classpath = files()
         reports {
-            xml {
-                destination "build/pmd.xml"
-            }
+            //只能开启一个
+            xml.enabled = true
+            html.enabled = false
         }
+    }
+    task jacocoTestReport(type:JacocoReport){//,dependsOn:"connectedAndroidTest"
+        group = "Reporting"
+        description = "Generate Jacoco coverage reports after running tests."
+        reports{
+            xml.enabled = false
+            html.enabled = true
+            csv.enabled = false
+        }
+        classDirectories = fileTree(
+                dir : "$buildDir/intermediates/classes/debug",
+                excludes : [
+                        '**/*Test.class',
+                        '**/R.class',
+                        '**/R$*.class',
+                        '**/BuildConfig.*',
+                        '**/Manifest*.*'
+                ]
+        )
+        def coverageSourceDirs = ['src/main/java']
+        additionalSourceDirs = files(coverageSourceDirs)
+        sourceDirectories = files(coverageSourceDirs)
+        additionalClassDirs = files(coverageSourceDirs)
+        executionData = files("$buildDir/outputs/code-coverage/connected/coverage.ec")
     }
 
     dependencies {
