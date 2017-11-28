@@ -55,7 +55,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                 break;
             case R.id.dashboard_view_3:
-                mDashboardView3.setCreditValue(new Random().nextInt(950 - 350) + 350);
+//                mDashboardView3.setCreditValue(new Random().nextInt(950 - 350) + 350);
 
                 break;
             case R.id.dashboard_view_4:
