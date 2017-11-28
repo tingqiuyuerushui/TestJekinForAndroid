@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        is-multidex="false"
+        jar="E:\Android Project\DashboardView-master\app\build\intermediates\jacoco\jacocoagent.jar"
+        jumboMode="false"
+        optimize="true"
+        revision="25.0.0"
+        sha1="fdca30f45b60c6ba724c26a9ce127975e26d4bcb">
+        <dex dex="E:\Android Project\DashboardView-master\app\build\intermediates\pre-dexed\debug\jacocoagent_02c5367573a778cd17a1c38f9a3cc4ce6e8aacc6.jar" />
+    </item>
+
+</items>
