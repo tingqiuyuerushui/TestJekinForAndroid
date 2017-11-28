@@ -26,11 +26,30 @@ android {
             }
         }
     }
-}
+    apply plugin: "pmd"
 
-dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    testCompile 'junit:junit:4.12'
-    compile 'com.android.support:appcompat-v7:25.0.0'
-    compile 'com.android.support:design:25.0.0'
+    repositories {
+        mavenCentral()
+    }
+    task pmd(type: Pmd) {
+        ignoreFailures = true
+        source = fileTree('src/com/xw/')
+        //ruleSetConfig = resources.file("${project.rootDir}/config/pmd/PmdRuleSets.xml")
+        //ruleSetFiles = files("config/pmd/PmdRuleSets.xml")
+        ruleSetFiles = files("${project.rootDir}/config/pmd/PmdRuleSets.xml")
+        ruleSets = ["java-android"]
+        reports {
+            xml {
+                destination "build/pmd.xml"
+            }
+        }
+    }
+
+    dependencies {
+        compile fileTree(dir: 'libs', include: ['*.jar'])
+        testCompile 'junit:junit:4.12'
+        compile 'com.android.support:appcompat-v7:25.0.0'
+        compile 'com.android.support:design:25.0.0'
+        compile 'net.sourceforge.pmd:pmd:5.4.0'
+    }
 }
