@@ -1,6 +1,6 @@
 apply plugin: 'checkstyle'
 apply plugin: 'findbugs'
-apply plugin: 'pmd'
+//apply plugin: 'pmd'
 
 /*
  * Copyright 2015 Vincent Brison.
@@ -20,7 +20,8 @@ apply plugin: 'pmd'
  */
 
 // Add checkstyle, findbugs, pmd and lint to the check task.
-check.dependsOn 'checkstyle', 'lint' ,'findbugs' , 'pmd'
+check.dependsOn 'checkstyle', 'lint' ,'findbugs'
+//check.dependsOn 'checkstyle', 'lint' ,'findbugs' , 'pmd'
 
 // 检查文件所在路径
 def configDir = "${project.rootDir}/quality"
@@ -51,7 +52,7 @@ task checkstyle(type: Checkstyle) {
 task findbugs(type: FindBugs, dependsOn: "assembleDebug") {
     ignoreFailures = true
     effort = "max"
-    reportLevel = "high"
+    reportLevel = "medium"
     excludeFilter = new File("$configDir/findbugs/findbugs-filter.xml")
     classes = files("${project.rootDir}/${appDir}/build/intermediates/classes")
 
@@ -74,28 +75,28 @@ task findbugs(type: FindBugs, dependsOn: "assembleDebug") {
 }
 
 /** PMD检查 */
-task pmd(type: Pmd) {
-    ignoreFailures = false
-    ruleSetFiles = files("$configDir/pmd/pmd-ruleset.xml")
-    ruleSets = []
-
-    source 'src'
-    include '**/*.java'
-    exclude '**/gen/**'
-    exclude 'androidTest/**'
-    exclude 'test/**'
-
-    reports {
-        xml.enabled = false
-        html.enabled = true
-        xml {
-            destination "$reportsDir/pmd/pmd.xml"
-        }
-        html {
-            destination "$reportsDir/pmd/pmd.html"
-        }
-    }
-}
+//task pmd(type: Pmd) {
+//    ignoreFailures = false
+//    ruleSetFiles = files("$configDir/pmd/pmd-ruleset.xml")
+//    ruleSets = []
+//
+//    source 'src'
+//    include '**/*.java'
+//    exclude '**/gen/**'
+//    exclude 'androidTest/**'
+//    exclude 'test/**'
+//
+//    reports {
+//        xml.enabled = false
+//        html.enabled = true
+//        xml {
+//            destination "$reportsDir/pmd/pmd.xml"
+//        }
+//        html {
+//            destination "$reportsDir/pmd/pmd.html"
+//        }
+//    }
+//}
 
 
 /** lint检查 */
