@@ -1,6 +1,6 @@
 apply plugin: 'com.android.application'
 apply plugin: 'findbugs'
-apply from: '../quality.gradle'
+//apply from: '../quality.gradle'
 android {
     compileSdkVersion 25
     buildToolsVersion '26.0.2'
@@ -42,7 +42,7 @@ android {
         source = fileTree('src/main/java/')
         classpath = files()
         reports {
-            xml.enabled = false
+            xml.enabled = true
             xml.withMessages = true
             html.enabled = !xml.isEnabled()
             xml.destination "$project.buildDir/outputs/findbugs/findbugs-output.xml"
