@@ -1,9 +1,9 @@
 apply plugin: 'com.android.application'
 apply plugin: 'findbugs'
-apply plugin: 'jacoco'
+apply from: '../quality.gradle'
 android {
     compileSdkVersion 25
-    buildToolsVersion "25.0.0"
+    buildToolsVersion '26.0.2'
 
     defaultConfig {
         applicationId "com.xw.sample.dashboardviewdemo"
@@ -27,26 +27,26 @@ android {
     jacoco{
         version "0.7.4.201502262128"
     }
-    android.applicationVariants.all { variant ->
-        variant.outputs.each { output ->
-            if (output.outputFile != null && output.outputFile.name.endsWith('.apk')) {
-                def name = "${rootDir}/apk/sample.apk"
-                output.outputFile = file(name)
-            }
+    android.applicationVariants.all {variant ->
+        variant.outputs.all {
+            outputFileName = "${variant.name}-${variant.versionName}.apk"
         }
     }
-    task findbugs(type: FindBugs,dependsOn:"connectedAndroidTest") {//
+    task customFindbugs(type: FindBugs) {
         ignoreFailures = true
         effort = "default"
         reportLevel = "medium"
-        //这里填写项目classes目录
-        classes = files("${project.rootDir}/andbase-core/build/intermediates/classes")
-        source = fileTree('src/main/java')
+        classes = files("$project.buildDir/intermediates/classes")
+        excludeFilter = file("$rootProject.rootDir/findbug_filter.xml")
+
+        source = fileTree('src/main/java/')
         classpath = files()
         reports {
-            //只能开启一个
-            xml.enabled = true
-            html.enabled = false
+            xml.enabled = false
+            xml.withMessages = true
+            html.enabled = !xml.isEnabled()
+            xml.destination "$project.buildDir/outputs/findbugs/findbugs-output.xml"
+            html.destination "$project.buildDir/outputs/findbugs/findbugs-output.html"
         }
     }
     task jacocoTestReport(type:JacocoReport){//,dependsOn:"connectedAndroidTest"

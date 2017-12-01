@@ -13,6 +13,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.LinearInterpolator;
 
+import java.io.File;
 import java.util.Random;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
@@ -40,7 +41,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mDashboardView2.setOnClickListener(this);
         mDashboardView3.setOnClickListener(this);
         mDashboardView4.setOnClickListener(this);
-
         mDashboardView2.setCreditValueWithAnim(new Random().nextInt(600) + 350);
     }
 
@@ -91,6 +91,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }
 
                 break;
+                default:
+                    break;
         }
     }
 
